@@ -1,0 +1,51 @@
+[project]
+name = "openib"
+version = "0.1.0"
+description = "Open Investment Bank — deterministic daily pipeline over free public financial data"
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "Apache-2.0" }
+
+# Intentionally empty. The core pipeline — landing zone, bitemporal loading,
+# canonical serialisation, ontology, golden-hash verification — runs on the
+# standard library alone, so `make daily` works on a box with no package index
+# reachable. See docs/adr/0006-jsonl-sink-before-parquet.md.
+dependencies = []
+
+[project.optional-dependencies]
+# The P1 lakehouse sink and interactive query layer. Installing these does not
+# change the pipeline's output; it changes where the pipeline writes.
+lakehouse = [
+  "pyarrow>=18",
+  "pyiceberg[sql-sqlite]>=0.8",
+  "duckdb>=1.1",
+]
+# Bloomberg's memray drives the optimisation work (plan section 3).
+profiling = ["memray>=1.14"]
+dev = ["ruff>=0.8", "pytest>=8"]
+
+[project.scripts]
+ob = "ob.cli:main"
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+package-dir = { "" = "python" }
+packages = ["ob"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py311"
+src = ["python", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B", "C4", "SIM"]
+ignore = [
+  # The determinism tests deliberately reach into module internals.
+  "SIM115",
+]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["E402"]
