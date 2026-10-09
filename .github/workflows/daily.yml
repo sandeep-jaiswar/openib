@@ -1,0 +1,56 @@
+name: daily
+
+# The real run, against live public sources.
+#
+# Manual-dispatch only for now, deliberately. The plan's default is 06:15 UTC,
+# but turning on a cron here means this repo starts making unattended requests
+# to the SEC, GLEIF, the ECB and the Treasury from GitHub's IP ranges — a
+# visible, outward-facing commitment. Enabling it is one uncommented line and
+# belongs to the SRE hire, together with per-source rate limiting and a
+# failure-notification path.
+#
+#  schedule:
+#    - cron: "15 6 * * *"
+
+on:
+  workflow_dispatch:
+    inputs:
+      date:
+        description: Logical date (YYYY-MM-DD). Defaults to today, UTC.
+        required: false
+        type: string
+
+permissions:
+  contents: read
+
+jobs:
+  run:
+    name: daily-full
+    runs-on: ubuntu-24.04
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+      - name: Fetch and transform
+        # Via env, not interpolated into the shell: a workflow input is
+        # attacker-controllable in the general case.
+        env:
+          OB_DATE: ${{ inputs.date }}
+        run: |
+          if [ -n "$OB_DATE" ]; then
+            make daily-full DATE="$OB_DATE"
+          else
+            make daily-full
+          fi
+      - name: Show the run receipt
+        if: always()
+        run: cat data/runs/*.json
+      - name: Upload the warehouse
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: warehouse-${{ github.run_id }}
+          path: |
+            data/warehouse/
+            data/runs/
+            data/manifests/
+          retention-days: 7

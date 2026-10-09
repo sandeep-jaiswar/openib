@@ -1,0 +1,71 @@
+name: ci
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  test:
+    name: determinism contract
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run the test suite
+        run: make test
+      - name: Hermetic daily run + golden-hash gate
+        run: make daily DATE=2026-10-09
+      - name: Rebuild from the landing zone reproduces the same bytes
+        run: |
+          make rebuild
+          make verify DATE=2026-10-09
+
+  clean-vm:
+    # The P0 acceptance gate, as a job so it cannot quietly rot: a fresh
+    # Ubuntu 24.04 box, nothing pre-installed by us, `clone && bootstrap &&
+    # daily` into a queryable warehouse with no further input.
+    name: clean Ubuntu 24.04 bootstrap
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: make bootstrap
+        run: make bootstrap
+      - name: make daily
+        run: make daily DATE=2026-10-09
+      - name: the warehouse is queryable
+        run: |
+          make query AS_OF=2025-06-30
+          make query AS_OF=2026-10-09
+
+  byte-identical-across-runners:
+    # D5 says the output bytes are a function of the inputs alone. If that is
+    # true, two independent runners must agree on every hash. If it is not,
+    # something ambient leaked into a transform and this job is how we find out.
+    name: hashes agree across machines
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-24.04, ubuntu-22.04]
+    steps:
+      - uses: actions/checkout@v4
+      - run: make daily DATE=2026-10-09
+
+  lint:
+    name: lint
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/ruff-action@v3
+        with:
+          args: check python tests
+      - name: shellcheck
+        run: shellcheck scripts/*.sh
