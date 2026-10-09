@@ -1,0 +1,14 @@
+id = "gleif-lei-level1"
+name = "GLEIF LEI level 1 (who is who)"
+publisher = "Global Legal Entity Identifier Foundation"
+terms_url = "https://www.gleif.org/en/meta/gleif-data-use-policy"
+transport = "https"
+version = "2026-10"
+profiles = ["full"]
+
+# The issuer identity anchor. Level 2 (who owns whom) follows in P2 and is what
+# makes the controlledBy link real.
+
+[[endpoints]]
+key = "golden-copy-index"
+url = "https://goldencopy.gleif.org/api/v2/golden-copies/publishes?page%5Bsize%5D=1"

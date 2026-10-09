@@ -1,0 +1,16 @@
+id = "fred"
+name = "FRED economic series"
+publisher = "Federal Reserve Bank of St. Louis"
+terms_url = "https://fred.stlouisfed.org/docs/api/terms_of_use.html"
+transport = "https"
+version = "2026-10"
+profiles = ["full"]
+requires_credential = true
+
+# FRED needs a free API key, so it sits behind --allow-credentialed and is
+# skipped by default. The daily run must work for someone who has not signed up
+# for anything.
+
+[[endpoints]]
+key = "dgs10"
+url = "https://api.stlouisfed.org/fred/series/observations?series_id=DGS10&file_type=json"

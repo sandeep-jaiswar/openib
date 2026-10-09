@@ -1,0 +1,19 @@
+id = "sec-edgar-companyfacts"
+name = "SEC EDGAR company facts (XBRL)"
+publisher = "U.S. Securities and Exchange Commission"
+terms_url = "https://www.sec.gov/os/webmaster-faq#developers"
+transport = "https"
+version = "2026-10"
+profiles = ["full"]
+
+# EDGAR requires a descriptive User-Agent and rate-limits to 10 requests per
+# second. The P1 connector adds the per-source rate limit and the bulk
+# submissions/companyfacts archives; these two endpoints are the smoke test.
+
+[[endpoints]]
+key = "cik0000320193"
+url = "https://data.sec.gov/api/xbrl/companyfacts/CIK0000320193.json"
+
+[[endpoints]]
+key = "cik0000789019"
+url = "https://data.sec.gov/api/xbrl/companyfacts/CIK0000789019.json"

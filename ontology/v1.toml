@@ -1,0 +1,278 @@
+version = "1.0.0-p0"
+
+# Ontology v1, as declared in the build plan. P0 lands the declaration and the
+# subset of object types the SEC companyfacts transform populates; the
+# remaining types are declared here so the schema is reviewable before anyone
+# writes a transform against it. Identity is anchored on public identifiers
+# (LEI / FIGI / CIK / MIC) and resolution is rule-based, never probabilistic.
+
+# ---------------------------------------------------------------- Issuer ----
+[object.Issuer]
+primary_key = ["issuer_key"]
+identity_anchor = "lei"
+sort_key = ["issuer_key"]
+
+[[object.Issuer.property]]
+name = "issuer_key"
+type = "string"
+required = true
+
+[[object.Issuer.property]]
+name = "name"
+type = "string"
+required = true
+
+[[object.Issuer.property]]
+name = "cik"
+type = "string"
+
+[[object.Issuer.property]]
+name = "lei"
+type = "string"
+
+[[object.Issuer.property]]
+name = "jurisdiction"
+type = "string"
+
+# ---------------------------------------------------------------- Filing ----
+[object.Filing]
+primary_key = ["accession_number"]
+identity_anchor = "accession_number"
+sort_key = ["accession_number"]
+
+[[object.Filing.property]]
+name = "accession_number"
+type = "string"
+required = true
+
+[[object.Filing.property]]
+name = "issuer_key"
+type = "string"
+required = true
+
+[[object.Filing.property]]
+name = "form"
+type = "string"
+required = true
+
+[[object.Filing.property]]
+name = "filed_date"
+type = "date"
+required = true
+
+[[object.Filing.property]]
+name = "fiscal_year"
+type = "integer"
+
+[[object.Filing.property]]
+name = "fiscal_period"
+type = "string"
+
+# --------------------------------------------------------- FinancialFact ----
+# The one table where bitemporality earns its keep. A restatement filed in 2027
+# lands as a second row with a later knowledge_time; it does not overwrite what
+# 2024 looked like. See docs/determinism.md, rule D2.
+[object.FinancialFact]
+primary_key = ["issuer_key", "concept", "unit", "valid_from", "valid_to", "knowledge_time"]
+bitemporal = true
+sort_key = ["issuer_key", "concept", "unit", "valid_from", "valid_to", "knowledge_time"]
+
+[[object.FinancialFact.property]]
+name = "issuer_key"
+type = "string"
+required = true
+
+[[object.FinancialFact.property]]
+name = "taxonomy"
+type = "string"
+required = true
+
+[[object.FinancialFact.property]]
+name = "concept"
+type = "string"
+required = true
+
+[[object.FinancialFact.property]]
+name = "value"
+type = "decimal"
+required = true
+currency = true
+
+[[object.FinancialFact.property]]
+name = "unit"
+type = "string"
+required = true
+unit = "iso4217_or_shares"
+
+[[object.FinancialFact.property]]
+name = "periodicity"
+type = "string"
+periodicity = "duration"
+
+[[object.FinancialFact.property]]
+name = "accession_number"
+type = "string"
+required = true
+
+[[object.FinancialFact.property]]
+name = "form"
+type = "string"
+
+[[object.FinancialFact.property]]
+name = "provenance_sha256"
+type = "string"
+required = true
+
+# ------------------------------------------------- declared, not yet fed ----
+# Populated from their own sources in P1/P2. Declared now so the shape of the
+# warehouse is settled before the connectors land.
+
+[object.Instrument]
+primary_key = ["figi"]
+identity_anchor = "figi"
+
+[[object.Instrument.property]]
+name = "figi"
+type = "string"
+required = true
+
+[[object.Instrument.property]]
+name = "issuer_key"
+type = "string"
+
+[[object.Instrument.property]]
+name = "isin"
+type = "string"
+
+[[object.Instrument.property]]
+name = "security_type"
+type = "string"
+
+[object.Exchange]
+primary_key = ["mic"]
+identity_anchor = "mic"
+
+[[object.Exchange.property]]
+name = "mic"
+type = "string"
+required = true
+
+[[object.Exchange.property]]
+name = "name"
+type = "string"
+
+[object.Listing]
+primary_key = ["figi", "mic"]
+
+[[object.Listing.property]]
+name = "figi"
+type = "string"
+required = true
+
+[[object.Listing.property]]
+name = "mic"
+type = "string"
+required = true
+
+[[object.Listing.property]]
+name = "ticker"
+type = "string"
+
+[object.PriceBar]
+primary_key = ["figi", "session_date"]
+
+[[object.PriceBar.property]]
+name = "figi"
+type = "string"
+required = true
+
+[[object.PriceBar.property]]
+name = "session_date"
+type = "date"
+required = true
+
+[[object.PriceBar.property]]
+name = "close"
+type = "decimal"
+currency = true
+
+[object.EconomicSeries]
+primary_key = ["series_id"]
+
+[[object.EconomicSeries.property]]
+name = "series_id"
+type = "string"
+required = true
+
+[[object.EconomicSeries.property]]
+name = "title"
+type = "string"
+
+[[object.EconomicSeries.property]]
+name = "unit"
+type = "string"
+
+[[object.EconomicSeries.property]]
+name = "periodicity"
+type = "string"
+periodicity = "monthly"
+
+[object.Watchlist]
+primary_key = ["watchlist_id"]
+
+[[object.Watchlist.property]]
+name = "watchlist_id"
+type = "string"
+required = true
+
+[[object.Watchlist.property]]
+name = "name"
+type = "string"
+required = true
+
+[object.Note]
+primary_key = ["note_id"]
+
+[[object.Note.property]]
+name = "note_id"
+type = "string"
+required = true
+
+[[object.Note.property]]
+name = "issuer_key"
+type = "string"
+
+[[object.Note.property]]
+name = "body"
+type = "string"
+
+# ----------------------------------------------------------------- links ----
+[link.filedBy]
+source = "Filing"
+target = "Issuer"
+cardinality = "many_to_one"
+
+[link.reportsFact]
+source = "Filing"
+target = "FinancialFact"
+cardinality = "one_to_many"
+
+[link.issues]
+source = "Issuer"
+target = "Instrument"
+cardinality = "one_to_many"
+
+[link.listedOn]
+source = "Instrument"
+target = "Exchange"
+cardinality = "many_to_many"
+
+[link.watches]
+source = "Watchlist"
+target = "Issuer"
+cardinality = "many_to_many"
+
+[link.annotates]
+source = "Note"
+target = "Issuer"
+cardinality = "many_to_one"

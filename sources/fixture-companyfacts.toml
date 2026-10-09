@@ -1,0 +1,19 @@
+id = "fixture-companyfacts"
+name = "Vendored SEC companyfacts fixture"
+publisher = "openib (synthetic, derived from the SEC companyfacts schema)"
+transport = "file"
+version = "2026-10-09"
+profiles = ["fixture", "ci"]
+root = "tests/fixtures/sec-companyfacts"
+
+# The fixture exists so `make daily` and the golden-hash gate run with no
+# network at all. Its documents use the real companyfacts shape, so the same
+# transform serves the fixture and the live endpoint.
+
+[[endpoints]]
+key = "example-hardware"
+url = "CIK0000320193.json"
+
+[[endpoints]]
+key = "example-software"
+url = "CIK0000789019.json"

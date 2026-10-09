@@ -1,0 +1,11 @@
+id = "ecb-data-portal"
+name = "ECB Data Portal (SDMX)"
+publisher = "European Central Bank"
+terms_url = "https://data.ecb.europa.eu/help/data-policy"
+transport = "https"
+version = "2026-10"
+profiles = ["full"]
+
+[[endpoints]]
+key = "eur-usd-daily"
+url = "https://data-api.ecb.europa.eu/service/data/EXR/D.USD.EUR.SP00.A?format=jsondata&lastNObservations=30"

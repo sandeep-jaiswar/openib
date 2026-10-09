@@ -1,0 +1,14 @@
+id = "openfigi"
+name = "OpenFIGI instrument identifiers"
+publisher = "Bloomberg L.P. (OpenFIGI)"
+terms_url = "https://www.openfigi.com/about/terms-of-service"
+transport = "https"
+version = "2026-10"
+profiles = ["full"]
+
+# The instrument identity anchor. The mapping API is POST-only and rate-limited
+# harder without an API key; the P1 connector handles both paths.
+
+[[endpoints]]
+key = "search-schema"
+url = "https://api.openfigi.com/v3/mapping/values/securityType"
