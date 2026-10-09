@@ -1,0 +1,108 @@
+{
+  "cik": 320193,
+  "entityName": "EXAMPLE HARDWARE CORP",
+  "facts": {
+    "us-gaap": {
+      "Revenues": {
+        "label": "Revenues",
+        "description": "Total revenue recognised in the period.",
+        "units": {
+          "USD": [
+            {
+              "start": "2023-10-01",
+              "end": "2024-09-28",
+              "val": 391035000000,
+              "accn": "0000320193-24-000081",
+              "fy": 2024,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2024-11-01",
+              "frame": "CY2024"
+            },
+            {
+              "start": "2023-10-01",
+              "end": "2024-09-28",
+              "val": 390912000000,
+              "accn": "0000320193-26-000014",
+              "fy": 2024,
+              "fp": "FY",
+              "form": "10-K/A",
+              "filed": "2026-02-17",
+              "frame": "CY2024"
+            },
+            {
+              "start": "2024-09-29",
+              "end": "2025-09-27",
+              "val": 416161000000,
+              "accn": "0000320193-25-000073",
+              "fy": 2025,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2025-10-31"
+            }
+          ]
+        }
+      },
+      "Assets": {
+        "label": "Assets",
+        "units": {
+          "USD": [
+            {
+              "end": "2024-09-28",
+              "val": 364980000000,
+              "accn": "0000320193-24-000081",
+              "fy": 2024,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2024-11-01"
+            },
+            {
+              "end": "2025-09-27",
+              "val": 371283000000,
+              "accn": "0000320193-25-000073",
+              "fy": 2025,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2025-10-31"
+            }
+          ]
+        }
+      },
+      "EarningsPerShareDiluted": {
+        "label": "Earnings Per Share, Diluted",
+        "units": {
+          "USD/shares": [
+            {
+              "start": "2023-10-01",
+              "end": "2024-09-28",
+              "val": 6.08,
+              "accn": "0000320193-24-000081",
+              "fy": 2024,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2024-11-01"
+            }
+          ]
+        }
+      }
+    },
+    "dei": {
+      "EntityCommonStockSharesOutstanding": {
+        "label": "Entity Common Stock, Shares Outstanding",
+        "units": {
+          "shares": [
+            {
+              "end": "2024-10-18",
+              "val": 15115823000,
+              "accn": "0000320193-24-000081",
+              "fy": 2024,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2024-11-01"
+            }
+          ]
+        }
+      }
+    }
+  }
+}

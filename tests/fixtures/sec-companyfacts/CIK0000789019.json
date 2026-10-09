@@ -1,0 +1,68 @@
+{
+  "cik": 789019,
+  "entityName": "EXAMPLE SOFTWARE CORP",
+  "facts": {
+    "us-gaap": {
+      "Revenues": {
+        "label": "Revenues",
+        "units": {
+          "USD": [
+            {
+              "start": "2023-07-01",
+              "end": "2024-06-30",
+              "val": 245122000000,
+              "accn": "0000950170-24-000087",
+              "fy": 2024,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2024-07-30"
+            },
+            {
+              "start": "2024-07-01",
+              "end": "2025-06-30",
+              "val": 281724000000,
+              "accn": "0000950170-25-000094",
+              "fy": 2025,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2025-07-29"
+            }
+          ]
+        }
+      },
+      "Assets": {
+        "label": "Assets",
+        "units": {
+          "USD": [
+            {
+              "end": "2024-06-30",
+              "val": 512163000000,
+              "accn": "0000950170-24-000087",
+              "fy": 2024,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2024-07-30"
+            }
+          ]
+        }
+      },
+      "OperatingIncomeLoss": {
+        "label": "Operating Income (Loss)",
+        "units": {
+          "USD": [
+            {
+              "start": "2023-07-01",
+              "end": "2024-06-30",
+              "val": 109433000000,
+              "accn": "0000950170-24-000087",
+              "fy": 2024,
+              "fp": "FY",
+              "form": "10-K",
+              "filed": "2024-07-30"
+            }
+          ]
+        }
+      }
+    }
+  }
+}
