@@ -1,0 +1,6 @@
+# Pinned so a rebuild in two years uses the compiler this project was verified
+# against. The Rust crates land in P1 (see crates/README.md).
+[toolchain]
+channel = "1.83.0"
+components = ["rustfmt", "clippy"]
+profile = "minimal"
